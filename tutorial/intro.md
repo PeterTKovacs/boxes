@@ -8,10 +8,10 @@ We touch upon network generation, boxing (with builtin and possible external) wr
 
 The directory structure I used on my device when running the notebooks:
 
-package:  /code/new_structure/boxes
+__package:__ \t  \~/code/new_structure/boxes
 
-tutorial notebooks:  /code/new_structure/
+__tutorial notebooks:__ \t  \~/code/new_structure/
                         
- results:  /result_logs   /facebook_caltech_demo/ .... etc
+__results:__ \t  /result_logs   \~/facebook_caltech_demo/ .... etc
 
 
