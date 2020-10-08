@@ -12,6 +12,6 @@ __package:__   \~/code/new_structure/boxes
 
 __tutorial notebooks:__   \~/code/new_structure/
                         
-__results:__  /result_logs   \~/facebook_caltech_demo/ .... etc
+__results:__ \~ /result_logs /facebook_caltech_demo/ .... etc
 
 
