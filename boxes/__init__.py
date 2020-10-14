@@ -9,11 +9,12 @@ from .mcwr import mcwr
 from .merge_algorithm import merge_algorithm
 from .simulated_annealing import simulated_annealing
 from .differential_evolution import differential_evolution
-from .load import read_from_edgelist
 from .bgrade import bgrade
-import boxes.io
+import boxes.io_
+import boxes.load
 from .pso import pso
 from .obca import  overlapping_box_covering as obca
 from .fuzzy import fuzzy
+from .boxing import boxing_
 
 algorithms=['random sequential','greedy_coloring (various strategies)','cbb','memb','remcc','mcwr','merge_algorithm','simulated annealing','differential_evolution','pso','obca']

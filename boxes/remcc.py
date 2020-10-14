@@ -5,7 +5,10 @@ def remcc(network,rb,return_centres=True):
 #implementation of the REMCC algorithm
     
     if rb==0:
-        return [[node] for node in network.graph.nodes()]
+        if return_centres:
+            return [[node] for node in network.graph.nodes()]
+        else:
+            return network.graph.number_of_nodes()
     else:
         
         uncovered=set(network.graph.nodes())

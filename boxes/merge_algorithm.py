@@ -2,7 +2,7 @@ import time
 import networkx as nx
 from .merge_if_possible import merge_if_possible
 
-def merge_algorithm(network, lb_max, return_for_sa=False, boxing=False,measure_time=True):
+def merge_algorithm(network, lb_max, return_for_sa=False, boxing=False,measure_time=False):
     
     # "Three  Algorithms  for  Analyzing  Fractal  Software  Networks"
     # by Mario Locci et al
