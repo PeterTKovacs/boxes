@@ -1,6 +1,10 @@
 # boxes
-code for box-covering algorithms
+Package for performing box-covering of complex networks
 
-lincense?
+Written by: Botond Kiss, Marcell Nagy, Péter Kovács 
 
-Currently not ready for release, (known) issues reported
+BME, Department of Stochastics
+
+Fork if you feel like.
+
+Some basic tutorial provided but recommend to read the docs & the report first.
