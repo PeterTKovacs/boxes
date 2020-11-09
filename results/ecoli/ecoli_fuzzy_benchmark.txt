@@ -1,0 +1,8 @@
+network: ecoli
+algorithm: fuzzy
+keyword arguments:{'boxing': True}
+execution time: 95.16853952407837
+box size	Nbs
+2	[43,43,43,43,43,43,43,43,43,43,43,43,43,43,43]
+4	[4,4,4,4,4,4,4,4,4,4,4,4,4,4,4]
+6	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]

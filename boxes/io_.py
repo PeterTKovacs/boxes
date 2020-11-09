@@ -119,7 +119,7 @@ def read_logfile(path):
         for line in f:
             tmp=line.split('\t')
             
-            if 'time' in line:
+            if 'execution time' in line:
                 tmp2=line.split(' ')
                 exec_time=float(tmp2[-1])
             
@@ -142,7 +142,7 @@ def read_logfile_bench(path):
         for line in f:
             tmp=line.split('\t')
             
-            if 'time' in line:
+            if 'execution time' in line:
                 tmp2=line.split(' ')
                 exec_time=float(tmp2[-1])
             
