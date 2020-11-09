@@ -1,0 +1,346 @@
+\documentclass{article}
+\usepackage[a4paper, total={6in,10in}]{geometry}
+
+\title{Documentation for the boxing package}
+
+\begin{document}
+	
+	\maketitle
+	
+	This documentation aims to introduce the basic functionality and notions of the \verb|boxing| class. This was developed for comparing box\- covering algorithms that may characterize fractal properties of networks.
+	
+	\section{The network class}
+	
+		This class is used to host the network, alongside the node-to-node shortest path data. It is built upon the networkx package (for the graph).
+		
+		\subsection{Notable data members}
+		
+		\begin{itemize}
+			\item \textbf{self.shortest\_paths}: returns {node1:{node2:shortest\_path12}} type dictionary
+			
+			\item \textbf{self.graph}: networkx.classes.graph.Graph
+			
+			\item \textbf{self.diameter}: nx.diameter(self.graph). Unfortunately, when the graph is unconnected, it cannot be computed this way. In that case, when calling \textbf{self.get\_dist\_dict}, the maximal geodesic length inside any component is computed and stored in \textbf{diameter}.
+			
+			\item \textbf{self.distance\_dict}: the inverted version of self.shortest\_paths, the output of \textbf{self.get\_dist\_dict}
+		\end{itemize}
+		
+		\subsection{important member functions}
+		\begin{itemize}
+			
+			\item \textbf{self.init}\\
+			Constructor that awaits a networkx graph (networkx.classes.graph.Graph) as argument. Node labels are converted to integers starting from 0.
+			
+			
+			\item \textbf{get\_dist\_dict} \\
+			Computes the node-to-node shortest path. Awaits no arguments and returns\\ a \verb|{node:{distance:set_of_appropite_nodes}}| type dictionary, where the innermost value is a set object. Also, sets \textbf{self.shortest\_path}.
+			
+			 \item \textbf{invert\_dict\_list}\\
+			 The similar functionality as get\_dist\_dict but instead of sets. we have lists at the innermost.\\
+			 Awaits a dictionary \textit{\{key:value\}} and inverts it: \textit{\{value:[list\_of\_keys]\}}.\\
+			 \textit{static method}\\
+			 
+			 \item \textbf{dual\_network}\\
+			 Creates the dual network (connections between the ones that do not fit in one box). Takes $l_b$ as an argument, returns the dual graph as a networkx \textit{graph}.
+			 
+			 \textit{The convention used for $l_B$ is different from usual (one box: $l_B$ at most.)}
+			 
+			  If \textbf{self.distance\_dict} is not present, computes it.
+			 
+			 \item \textbf{ball\_of\_seed}\\
+			 Takes \textit{(seed,$r_B$)} and determines nodes that are separated from seed $r_B$ at most. Returns them in a set. If \textbf{self.distance\_dict} is not present, computes it.
+			 
+		\end{itemize}
+	
+	\section{Miscellaneous functions}
+	
+	\subsection{The io module}
+	
+	This module is built on top of the implemented algorithms, purpose is to manage boxing with calling the appropriate algorithm and logging results into files. 
+	
+	In addition to this, reading such files is supported too.
+	
+	\begin{itemize}
+		\item \textbf{run\_boxing(names,time\_offset,network,box\_sizes,algorithm,merge\_alg=False,**kwargs)}
+		
+		This function is a generic boxing method. It performs boxing with the passed \textit{algorithm}, on the given \textit{network} (instance of the network class) with passed \textit{box\_sizes} (iterable).
+		
+		It is assumed that the necessary preprocessing (computing shortest path data) is already performed, its time is passed in \textit{time\_offset}. The \textit{names} dictionary contains info for naming and filling the logfile, in the format of \textit{\{'path':'\~/results/','net':'ecoli','alg':'greedy'\}}. Using this, the file will be saved as \textit{names['path']+names['net']+'\_'+names['alg']+'.txt'}.\\
+		
+		Running the algorithms goes following way: besides the network and box sizes, all miscellaneous parameters are passed as keyword arguments. For the \textit{merge} algorithm, \textit{only the maximal box size} ($l_b$) should be passed and it is expected that \textit{measure\_time} is set False. For all other algorithms, boxing is performed for all passed \textit{box\_sizes}. An important stopping criterion is that if $N_b$=1, tha process terminates. After running boxing, the garbage collector is called. And the runtime of boxing is logged.\\
+		
+		After all of this, results are saved into a .txt file as specified above.
+		
+		\item \textbf{benchmark(names,time\_offset,network,box\_sizes,algorithm,n,merge\_alg=False,**kwargs)}
+		
+		Works similarly as \textit{run\_boxing} but performs boxing \textit{n} times for every box size. (Obviously, this function is meant for benchmarking.) Logs results into \textit{names['path']+names['net']+'\_'+names['alg']+
+			'\_benchmark.txt'}
+		
+		Dumps the arrays of $N_b$-s for a given box size with default numpy method and ',' separator.
+		
+		\item \textbf{read\_logfile(path)}
+		
+		Reading back of files logged by \textit{run\_boxing}. Returns the execution time and a list of ($l_b$,$N_b$) tuples.
+		
+		\item \textbf{read\_logfile\_bench(path)}
+		
+		This works exactly the same manner but for benchmark logs.
+		
+		
+		
+		
+	\end{itemize}
+
+	\subsection{The load module}
+	
+	This module consists of:
+	
+	\begin{itemize}
+		\item \textbf{read\_from\_edgelist(edge\_file,header=0)}
+		
+		Reads unweighted, undirected graph from edgelist. Skips \textit{header} rows from the input file and then awaits the (integer) ID of nodes that are connected, separated by any whitespace chars. 
+		
+		Returns \textit{networkx graph}.
+		
+		\item \textbf{read\_max\_connected\_component(path,header\_length=0)}
+		
+		Reads unweighted and undirected graph from file with \textit{header\_length} long header rows (skipped). Returns the maximal connected component as \textit{networkx} graph.
+		
+	\end{itemize}
+
+	\subsection{The boxing module}
+	
+	This module only contains the \textbf{boxing\_(network, net, alg\_dict, box\_sizes, path, preprocessing='distance\_dict', benchmark\_n=-1)} function.
+	
+	As the name implies, this is the ultimate wrapper function for boxing, with pretty straightforward (usual) arguments. Note that \textit{preprocessing} may take values 'distance\_dict', 'shortest\_paths' or anything else if no preprocessing is needed.
+	
+	The random seed is set before \textit{benchmark} or \textit{run\_boxing}
+	
+	
+	\section{Investigated networks}
+	
+	In the course of the investigations, we both tested algorithms on network models and real-world networks. They are introduced in few lines each.
+	
+	\subsection{(u,v) flower}
+	
+	The (u,v) flower is a graph parametrized by \{u,v,n\} \cite{uv}. It is best understood considering its creation: we start with a circular graph of u+v nodes as the first (g=1) generation. In every generation, we replace all existing edges, with a \textit{u} and \textit{v} long path each.\footnote{So then u+v-2 new nodes are added per edge.} This process is repeated until generation \textit{n} (g=n).\\
+	
+	Arguments: \textit{(u, v, n)}.
+	
+	\subsection{SHM network}
+	
+	Introduced by Song, Havlin and Makse, the growth of this network is controlled by a continous \textit{e} parameter. The idea is to reverse the renormalization process in some sense. In every generation, $k \cdot m $ new nodes are linked to each previously existing one with \textit{k} being the respective degree. Between any two linked 'parent' nodes, the edge is removed with \textit{1-e} probability and \textit{x} new edges are formed between their 'children' nodes. The process is repeated until the desired generation number is reached. Generation \#0 starts with two connected nodes. \\
+	
+	Arguments: \textit{(generation, m, x, e)}.\\
+	Evolution starts from generation \#0 and after this, \textit{generation} steps are performed.
+	
+	\subsection{HADGM}
+	
+	This network model is the slight modification of the SHM model \cite{hadgm}. There are two points of modification.\\
+	 First, the authors argue that instead of implementing repulsion between all the parent nodes in the growth step, it may be beneficial to partition them into two groups: hubs and the others. In the repulsion step, different $e_i$ probabilities apply: hub-hub links have a higher chance of survival than others. More precisely, a parent is hub if satisfies: $k_i (t-1) / k_{max} (t-1) > T$, where \textit{(t-1)} signals degrees before the child assignment and $k_{max}$ is the maximal degree of any node before the child assignment. So then hub-hub links die out with probability (1-a) and others with (1-b) with \textit{a,b,T} pre-defined parameters.\footnote{To be consistent with the above arguments, $a>b$ is chosen.} Another modification is that after deleting a parent link, only one new is built (instead of \textit{x}).\\
+	 Secondly, after completing the repulsion stage, links inside the boxes (so between children of the same parent) are added. The number of new edges in each box equals $k_i (t-1)$. Citing the paper: \textit{'We randomly pick one offspring
+	 node in each box and link it to other $\tilde{k}(t-1)$ number of offspring nodes.'} (In the description, we denoted $\tilde{k}(t-1)$ by $k_i (t-1)$.)\\
+ 	
+	Arguments:\textit{(generations, m, a, b, t\_cutoff)}. \\
+  	Evolution starts from two connected nodes as generation \#0 and then \textit{generation} new generations follow. In the documentation, \textit{T} stands for $t_{cutoff}$. 
+		 
+	\section{Implemented algorithms}
+	
+	
+	The \textit{boxes.algortihms} list contains the callable boxing algorithms.
+	
+	\subsection{Random sequential}
+	
+	Original idea from \cite{random_sequential}. The algorithm uses the notion of burning: in every step, an unburned node is randomly chosen\footnote{Note that in the original paper, all the nodes participated in the random selection! The authors argue that in some cases, that was necessary to obtain the desired behavior.} and we sort unburned nodes to this center that are not farther than $r_B$.\\
+	
+	 Arguments: \textit{(network,rb,boxing=False)}\\
+	 Here, \textit{network} is an instance of the \textbf{network} class, \textit{rb} is the radius and \textit{boxing} determines if the box number or the boxes are returned.\\
+	 If \textit{network.distance\_dict} not computed previously, the network.get\_dist\_dict function is ran (gives notification).
+	 
+	\subsection{Bounding random sequential}
+	
+	This algorithm is based on \cite{bounding_rs}. The algorithm is almost the same as the random sequential but here we burn clusters of radius $l_B$. This guarantees that the number of clusters at the end is not greater than the desired $N_B$.\footnote{Any pair of centers is farther than $l_B$ so cannot be in the same box anyway.}\\
+	
+	To run this algorithm, the we call the random sequential with argument $r_B=l_B$.
+	
+	\subsection{Greedy coloring}
+	
+	This family of algorithms uses the conceptual trick of mapping the boxing problem to the famous graph coloring. So then, the actual coloring algorithm is implemented in the \textbf{networkx} package. Besides that, we only do some postprocessing.\\
+	
+	Arguments: \textit{(network,lb,boxing=False,pso\_position=False,strategy='random\_sequential')}\\
+	Here, \textit{network} is an instance of the \textbf{network} class, \textit{lb} is the box size, \textit{boxing} determines if the box number or the boxes are returned, \textit{pso\_position} is a flag for computing the node-color(=box) list.\\
+	The coloring is done on the dual network of \textit{network}, produced by the \textit{dual\_network} member function of the class. Only one option is returned, in the pso, boxes priority order.\\
+	
+	For coloring strategies, see the \textbf{networkx} docs.
+	
+	\subsection{Compact Box Burning (CBB)}
+	
+	This algorithm uses the concept of burning nodes. The original idea was presented in \cite{cbb}. The main point is to grow boxes such that we pick new nodes randomly from a set that contains all nodes that are not farther than $l_B$ from any node already in the box. This guarantees that the box is compact\footnote{Roughly speaking we cannot add any more nodes.} in the sense of the authors.\\
+	
+	Arguments: \textit{(network,lb,boxing=False)}\\
+	Here, \textit{network} is an instance of the \textbf{network} class, \textit{lb} is the box size and \textit{boxing} determines if the box number or the boxes are returned.\\
+	If \textit{network.distance\_dict} not computed previously, the network.get\_dist\_dict function is ran (gives notification).
+	
+	\subsection{MEMB}
+	
+	This algorithm was also presented in \cite{cbb}. Instead of the conventional box definition, this uses the notion of centered boxes: every box has a special node, a center. Boxes are constructed such that every node is in the $r_B$ ball of its center. The implementation guarantees that all the boxes are connected\footnote{By the implementation, every node is connected to its center.}. Without diving into details, the algorithm tries to avoid 'hub-failures' by selecting first centers and then assigning the remaining nodes to them in a wise manner.\\
+	
+	Arguments: \textit{(network,rb,boxing=False)}\\
+	Here, \textit{network} is an instance of the \textbf{network} class, \textit{rb} is the ball radius and \textit{boxing} determines if the box number or the boxes are returned.\\
+	If \textit{network.distance\_dict} not computed previously, the network.get\_dist\_dict function is ran (gives notification). (If \textit{network.shortest\_path} is absent, it is computed too.)\\
+	
+	Remark: the code slightly differs from the one presented in the original paper. Again, the distance of $r_B$ from the center is allowed in the package but not in the paper.
+	
+	\subsection{REMCC}
+	
+	Idea based on \cite{remcc}. The authors think this algorithm to be a better version of MEMB. The paper is quite obscure on why this algorithm would be better than any other.\footnote{It is said that other methods 'break network connectivity', but the MEMB run in the example is not carried out carefully. Personally, I do not find the paper credible. } The algorithm greedily covers nodes. In every step, a new center is chosen from uncovered nodes such that the choice maximizes the 'f\_point'. This is the novel metric in the paper, which is the excluded mass times the average shortest path to all other nodes. All nodes in the $r_B$ ball of the center are covered then.
+	
+	In the current implementation, no boxing scheme is introduced, only the centers are determined. The method can be extended to weighted graphs\\
+	
+	Arguments: \textit{(network,rb,centres=False)}\\
+	Here, \textit{network} is an instance of the \textbf{network} class, \textit{rb} is the ball radius and \textit{centres} determines if the centers or the box number is returned.\\
+	
+	 If \textbf{self.distance\_dict} is not present, computes it.
+	
+	\subsection{MCWR}
+	
+	This algorithm comes from \cite{mcwr}. In fact, it is a combination of MEMB and the random sequential (RS) algorithm. In addition, a new way of keeping track of excluded mass is proposed. 
+	
+	The core concept is that we modify MEMB such that before choosing a new center, we toss a biased coin so that we perform the usual MEMB steps with \textit{p} probability and choose a random center in the remaining cases.\footnote{Here, the choice is made such that covered nodes but the ones with $m_{ex}=0$ are allowed } After finding a new center, the excluded masses are updated: only nodes inside the newly covered's $r_B$ ball are affected. (This is the 'novel scheme' for excluded mass.)
+	
+	The boxing of non-center nodes is organized as in MEMB.\\
+	
+	
+	
+	Arguments: \textit{(network,rb,p=1,boxing=False)}\\
+	Here, \textit{network} is an instance of the \textbf{network} class, \textit{rb} is the ball radius, \textit{p} is the coin parameter\footnote{The default setting correspond to MEMB.} and \textit{boxing} determines if the boxes or the box number is returned.\\
+	
+	If \textit{network.distance\_dict} not computed previously, the network.get\_dist\_dict function is ran (gives notification). (If \textit{network.shortest\_path} is absent, it is computed too.)\\
+	
+	\verb|remark: p is a hyperparameter that may need tuning!|\\
+	\verb|remark2: wouldn't it be wiser to do the random choice at specific parts (end)?|
+	
+	\subsection{Merge algorithm}
+	
+	Idea from \cite{merge}. For a given box size, we try to merge clusters inherited from a smaller box size. We do this until no more clusters can be merged.\footnote{After merging, both participants are 'removed' from the considered clusters} The number of clusters is $N_B (l_B)$. Then, box size is incremented and the whole procedure is repeated. The code uses the \textbf{merge\_if\_possible} module.\\
+	
+	Arguments: \textit{(network, lb\_max, return\_for\_sa=False, boxing=False,measure\_time=False)}\\
+	Here, \textit{network} is an instance of the \textbf{network} class, \textit{lb\_max} is the maximal $l_B$,\footnote{$l_B$ starts from 1}, \textit{return\_for\_sa, boxing} are two mutually exclusive ways the algorithm can return values: the SA option gives C (after the maximal $l_B$ is reached) whereas boxing gives the numbers of boxes for every intermediate $l_B$. If \textit{measure\_time} is true, boxing also returns the runtime for every $l_B$. If neither true, a list of final clusters (represented as lists) is returned.\footnote{list(map(list, c))}\\
+	
+	Note that the returned list's first element corresponds to $l_B=0$!
+	
+	
+	\subsubsection{Merge\_if\_possible}
+	
+	Auxiliary function for the merge- and simulated annealing algoriths. For a given C list, it returns list D, which is the merged version of C, containing clusters as sets after the merging procedure. (First, a random member, $c_k$ is chosen, then all mergeable $c_j$s are accumulated from whose a random one is merged with $c_k$. The new cluster is stored in D  while the parents are removed from C. Cycle goes on until C is empty.)\\
+	
+		\verb|note that the merged ones are thrown away, may not appear with the same lB|\\
+		\verb|so then if max_lB << log N then the results may be practically unusable!|\footnote{It may be that further merge operations could be performed but the elimination of once merged ones spoils the procedure so we reach the maximal $l_B$ with 'unsaturated' boxes but the algorithm terminates. }\\
+	
+	\verb|remark: in the current implementation, choosing the to-be-merged pairs is|\\
+	\verb| rather clumsy: almost the whole C' is thrown away|\\
+	
+	Arguments: \textit{(c,lb,distance\_dict)}\\
+	Here, \textit{c} is C (as list), $l_B$ the box size and \textit{distance\_dict} contains the shortest path data in the \textit{\{node1:\{node2:distance12\}\}} format. Returns D as a list.
+	
+	\subsection{Simualted annealng}
+	
+	The idea from \cite{merge}. The algorithm is built upon the above \textbf{merging algorithms}. Basically, we try to improve the merged output by (i) moving single nodes, (ii) creating new clusters and (iii) merging clusters in the new cluster partitioning. After performing these steps in the above sequence, we test if the number of boxes decreased. When it did (or remained the same), we keep the new configuration. If increased, we keep the new configuraton with  $exp\{-\frac{\Delta N_B}{T}\}$ probability , that is decreased in every iteration: $T'=T\cdot cc$. \\
+	
+	Arguments: \textit{(network, lb, k1=20, k2=2, k3=15, temp=0.6, cc=0.995)}. \\
+	Here, \textit{network} is an instance of the \textbf{network} class, \textit{lb} is $l_B$, $k_1$ gives the approximate number of nodes moved in (i),\footnote{In fact, we try maximally $2 k_1$ times to move nodes and actually do it $k_1$ times at most.} $k_2$ is the number of maximally created new clusters (made up of one node),\footnote{We make maximally $k_2$ random choices of boxes from which a node is tried to be removed} $k_3$ is the number of outer cycles \- in every iteration, the temperature is decreased as specified by \textit{cc}.\\
+
+	
+	\subsection{Differential evolution}
+	
+	The idea of differential evolution was taken from \cite{de_storn}. It belongs to the family of evolutional optimization methods, originally proposed over a D dimensional space. This idea was used in \cite{de_kuang}. Their proposal is to box the graph with sequential greedy coloring such that the coloring sequence is represented by an N dimensional vector.\footnote{The ordering of components gives the ordering of nodes. Seems like a bit of an overkill...} Because the sequential greedy coloring algorithm is deterministic, finding the optimal box covering may be thought of as optimization over this N dimensional space. The optimization is done by the differential evolution approach.\\
+	
+	Arguments: \textit{(network, lb, num\_p=15, big\_f=0.9, cr=0.85, gn=15, boxing=False, dual\_new=False)}. \\
+	Here, \textit{network} is an instance of the \textbf{network} class, \textit{lb} is $l_B$, \textit{num\_p} gives the number of vectors in one generation, \textit{big\_f, cr} are parameters (see paper or code), \textit{gn} gives the number of generations, \textit{boxing} determines if the actual boxes or their number is returned and \textit{dual\_new} sets which greedy coloring function to use.\footnote{There are two, from which the new is thought to be much faster.}
+	
+	\subsection{PSO}
+	
+	The idea of Particle Swarm Optimization came from \cite{pso}. Basically, we define a set of 'paricles', representing a valid boxing of the network each. In every step, each particle may be updated depending on its and the whole flock's best boxing and a bunch of hyperparameters and random variables. In the end, the best overall best boxing is the outcome. 
+	
+	Particles are initialized with the greedy-coloring algorithm, velocities (see paper) start from zero.\\
+	
+	Arguments: \textit{pso(network, lb, gmax=5, pop=5, c1=1.494, c2=1.494, boxing=False)}. Here, \textit{network} is an instance of the \textbf{network} class, \textit{lb} is $l_B$, \textit{gmax} gives the number of generations, \textit{pop} the population of the particle swarm, \textit{c1, c2} are hyperparameters with the recommended value from the paper, \textit{boxing} determines if the box number or the boxes themselves (list of lists) are returned.\\
+	
+	\verb|remark: smaller node IDs have priority in updates!|\\
+	\verb|remark2: in the implementation XOR means not equal - makes more sense than bitwise XOR|
+	
+	\subsection{OBCA}
+	
+	Original paper: \cite{obca}. The authors suggest that instead of burning boxes on the fly, one should only mark possible boxes while processing data. In a proposed box, all nodes are included whose distance from the seed of the box is at most $l_B$  After this, redundant boxes \-- ones that only contain nodes that are at least in another proposed box \-- are deleted. After the iteration is over, only non-redundant boxes survive.
+	
+	When creating proposals, nodes are iterated over in an ascending order wrt. degree. (The authors maintain that it is a good idea to choose seeds from the least-possible-degree nodes.)\\
+	
+	Arguments: \textit{overlapping\_box\_covering(network, lb, boxing=False)}.
+	
+	 Here, \textit{network} is an instance of the \textbf{network} class, \textit{lb} is $l_B$ and \textit{boxing} determines if the box number or the boxes themselves are returned.
+	
+	\subsection{Fuzzy algorithm}
+	
+	Idea from \cite{fuzzy}. The authors propose a novel scheme for estimating the fractal dimension of a network. Instead of assigning boxes, they introduce a measure to estimate what fraction of the network one box covers on average.
+	
+	 For each node, a box of radius $l_B$ is constructed and the included neighbour nodes' contributions are summed. This contribution is a so called 'membership-function' that exponentially decays with the distance from the central node.
+	 
+	 After aggregating and normalizing these contributions, we get an estimation of what proportion an average box covers. Taking its inverse gives the approximating box number.\\
+	 
+	 Arguments: \textit{fuzzy(network, lb, boxing=True)}.
+	 
+	Here, \textit{network} is an instance of the \textbf{network} class, \textit{lb} is $l_B$ and \textit{boxing} should always set to \textbf{True}, since we do not have actual boxes.
+	
+\begin{thebibliography}{9}
+	
+	\bibitem{uv}
+	Hernán D Rozenfeld, Shlomo Havlin, and Daniel Ben-Avraham. Frac-
+	tal and transfractal recursive scale-free nets. New Journal of Physics,
+	9(6):175, 2007.
+	
+	\bibitem{hadgm}
+	Kuang, Li \& Zheng, Bojin \& Li, Deyi \& Li, Yuanxiang \& Sun, Yu. (2013). A Fractal and Scale-free Model of Complex Networks with Hub Attraction Behaviors. Science China Information Sciences. 58. 10.1007/s11432-014-5115-7. 
+	
+	\bibitem{random_sequential}
+	Kim, Js \& Goh, K-I \& Kahng, B. \& Kim, Doochul. (2007). A box-covering algorithm for fractal scaling in scale-free networks. Chaos (Woodbury, N.Y.). 17. 026116. 10.1063/1.2737827.
+	
+	\bibitem{bounding_rs} 
+	C. Yuan, Z. Zhao, R. Li, M. Li and H. Zhang, "The Emergence of Scaling Law, Fractal Patterns and Small-World in Wireless Networks," in IEEE Access, vol. 5, pp. 3121-3130, 2017, doi: 10.1109/ACCESS.2017.2674021.
+	
+	\bibitem{cbb}
+	Chaoming Song et alJ. Stat. Mech. (2007) P03006
+	
+	\bibitem{remcc}
+	Zheng, Wei \& Pan, Qian \& Chen, Sun \& Deng, Yu-Fan \& Zhao, Xiao-Kang \& Kang, Zhao. (2016). Fractal Analysis of Mobile Social Networks. Chinese Physics Letters. 33. 038901. 10.1088/0256-307X/33/3/038901. 
+	
+	\bibitem{mcwr}
+	Liao, Hao \& Wu, Xingtong \& Wang, Bing \& Wu, Xiangyang \& Zhou, Mingyang. (2019). Solving the speed and accuracy of box-covering problem in complex networks. Physica A: Statistical Mechanics and its Applications. 523. 10.1016/j.physa.2019.04.242. 
+	
+	\bibitem{merge}
+	Locci, Mario \& Concas, Giulio \& Tonelli, Roberto \& Turnu, Ivana. (2010). Three Algorithms for Analyzing Fractal Software Networks. WSEAS Transactions on Information Science and Applications. 7.
+	
+	\bibitem{de_storn}
+	Storn, R., Price, K. Differential Evolution – A Simple and Efficient Heuristic for global Optimization over Continuous Spaces. Journal of Global Optimization 11, 341–359 (1997). https://doi.org/10.1023/A:1008202821328
+	
+	\bibitem{de_kuang}
+	Kuang, Li. (2014). A differential evolution box-covering algorithm for fractal dimension on complex networks. 10.1109/CEC.2014.6900383. 
+	
+	\bibitem{pso}
+	L. Kuang, F. Wang, Y. Li, H. Mao, M. Lin and F. Yu, "A discrete particle swarm optimization box-covering algorithm for fractal dimension on complex networks," 2015 IEEE Congress on Evolutionary Computation (CEC), Sendai, 2015, pp. 1396-1403, doi: 10.1109/CEC.2015.7257051.
+	
+	\bibitem{obca}
+	Sun, YuanYuan \& Zhao, Yujie. (2014). Overlapping-box-covering method for the fractal dimension of complex networks. Physical Review E. 89. 10.1103/PhysRevE.89.042809.
+	
+	\bibitem{fuzzy}
+	Haixin Zhang, Yong Hu, Xin Lan, Sankaran Mahadevan, Yong Deng,
+	Fuzzy fractal dimension of complex networks,
+	Applied Soft Computing,
+	Volume 25,
+	2014,
+	Pages 514-518,
+	ISSN 1568-4946,
+	https://doi.org/10.1016/j.asoc.2014.08.019.
+
+	\end{thebibliography}
+	
+\end{document}
