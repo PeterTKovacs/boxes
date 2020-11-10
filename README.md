@@ -11,4 +11,4 @@ Fork if you feel like.
 
 Some basic tutorial provided but recommend to read the docs & the report first.
 
-Obviously, you may want to run the tutorial notebook from the appropriate location to 'see' the __boxes__ package.
+Obviously, you may want to run the [tutorial notebook](./tutorial/boxing_tutorial.ipynb) to understand how the __boxes__ package works.
