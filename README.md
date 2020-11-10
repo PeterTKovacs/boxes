@@ -1,11 +1,11 @@
 # boxes
 Package for performing box-covering of complex networks
 
-Written by: Marcell Nagy, Péter Kovács 
+Developed by: Marcell Nagy, Péter Kovács 
 
 contributions by Botond Diviki-Nagy
 
-BME, Department of Stochastics
+Budapest University of Technology and Economics (BME), Department of Stochastics
 
 Fork if you feel like.
 
