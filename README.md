@@ -1,5 +1,5 @@
 # boxes
-This modole contains several box-covering algorithms, which are designed to estimate the fractal dimensionn of complex networks. 
+This module contains several box-covering algorithms, which are designed to estimate the fractal dimensionn of complex networks. 
 The following algorithms are implemented:
 * Random sequental (RS)
 * Compact-Box-Burning (CBB)
