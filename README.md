@@ -24,3 +24,5 @@ Fork if you feel like.
 Some basic tutorial provided but recommend to read the docs & the report first.
 
 Obviously, you may want to run the [tutorial notebook](./tutorial/boxing_tutorial.ipynb) outside the tutorial folder to be able to load the __boxes__ package.
+
+If you plan to add new algorithms, it is really easy but you will have to consider amending the logfile management (eg. canonization, reading).
