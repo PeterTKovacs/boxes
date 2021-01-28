@@ -22,6 +22,8 @@ def simulated_annealing(network, lb, k1=20, k2=2, k3=15, temp=0.6, cc=0.995):
     
     s = merge_algorithm(network,lb, return_for_sa=True) # list of clusters as sets
     
+    t=temp
+    
     if lb == 0:
         return s
     else:
@@ -73,35 +75,31 @@ def simulated_annealing(network, lb, k1=20, k2=2, k3=15, temp=0.6, cc=0.995):
             
 # try to create k2 clusters - 'k2 trials': maximum k2 new clusters: AMENDED
 
-            i = 0
-            while i < k2:
+            i = 0 #success
+            trial=0
+            while trial < 2 * k2 and i<k2:
                 box_a = random.choice(s2)
+                trial+=1
                 
-                while len(box_a) < 2:  # runs until len(box_a)>1
-                    box_a = random.choice(s2)
-                    i += 1
-                    
-                if i >= k2:
-                    break
-                
-            #executes if i<k2
+                if len(box_a)<2:
+                    continue
                 
                 n = random.choice(list(box_a)) 
                 box_a.discard(n)
                 s2.append({n})
+                i+=1
                 
-                i+=1 # ORIGINALLY ABSENT, this is needed not to exceed k2
+               
 
+            s2 = merge_if_possible(s2, lb, shortest_paths)
 
             
 # if E(S') <= E(S) ...
 
-            if len(s2) <= len(s) or random.random() < math.exp(-(len(s2) - len(s)) / temp):
+            if len(s2) <= len(s) or random.random() < math.exp(-(len(s2) - len(s)) / t):
                 s = s2
-            temp = cc * temp
+            t = cc * t
             
-# Merge clusters using MA algorithm: AMENDED - in the paper, it is placed here but originally it was just before the E test 
 
-            s = merge_if_possible(s, lb, shortest_paths)
 
     return list(map(list, s))
