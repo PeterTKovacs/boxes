@@ -5,7 +5,7 @@ The following algorithms are implemented:
 
 | Type          | Algorithm                                          | Abbr  | Year | Ref |
 |---------------|----------------------------------------------------|-------|------|-----|
-| Classic       | Random sequental                                   | RS    | 2007 | [1] |
+| Classic       | Random sequental                                   | RS    | 2007 | [1](#random-sequential) |
 | Classic       | Greedy coloring                                    | GC    | 2007 | [2] |
 | Burning       | Compact-Box-Burning                                | CBB   | 2007 | [2] |
 | Burning       | Max-Excluded Mass Burning                          | MEMB  | 2007 | [2] |
@@ -35,5 +35,6 @@ If you plan to add new algorithms, it is really easy but you will have to consid
 
 ## References
 
-| <span style="font-weight:normal">[1]</span> | <span style="font-weight:normal">Fractality and self-similarity in scale-free networks</span> |
-|-----|---------------------------------------------------------------------------------|
+| Ref | Title |
+|-----|-------|
+| <a name="random-sequential">1</a> | Fractality and self-similarity in scale-free networks  |
