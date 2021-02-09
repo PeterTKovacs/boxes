@@ -37,4 +37,4 @@ If you plan to add new algorithms, it is really easy but you will have to consid
 
 | Ref | Title |
 |-----|-------|
-| <a name="random-sequential">1</a> | Fractality and self-similarity in scale-free networks  |
+| <a name="random-sequential"></a>[1] | Fractality and self-similarity in scale-free networks  |
