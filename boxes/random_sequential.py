@@ -28,10 +28,10 @@ def random_sequential(network, rb, boxing=False):
                 # slightly shorter running time
                 
                 seed = random.choice(list(unburned))
-                box = list(network.ball_of_seed(seed, rb).intersection(unburned))
+                box = network.ball_of_seed(seed, rb).intersection(unburned) # modified: use sets instead of list!
                 if box:
                     boxes.append(box)
-                    unburned -= set(box)
+                    unburned -= box
                     
         if boxing:
             return len(boxes)
