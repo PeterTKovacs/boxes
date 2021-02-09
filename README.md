@@ -35,5 +35,5 @@ If you plan to add new algorithms, it is really easy but you will have to consid
 
 ## References
 
-| [1] | ####Fractality and self-similarity in scale-free networks |
-|-----|-----------------------------------------------------------|
+| [1] | Fractality and self-similarity in scale-free networks |
+|-----|-------------------------------------------------------|
