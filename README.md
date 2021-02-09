@@ -5,7 +5,7 @@ The following algorithms are implemented:
 
 | Type          | Algorithm                                          | Abbr  | Year | Ref |
 |---------------|----------------------------------------------------|-------|------|-----|
-| Classic       | Random sequental                                   | RS    | 2007 | [1] |
+| Classic       | Random sequental                                   | RS    | 2007 | [[1]](#fractality-and-self-similarity-in-scale-free networks) |
 | Classic       | Greedy coloring                                    | GC    | 2007 | [2] |
 | Burning       | Compact-Box-Burning                                | CBB   | 2007 | [2] |
 | Burning       | Max-Excluded Mass Burning                          | MEMB  | 2007 | [2] |
@@ -30,3 +30,9 @@ Some basic tutorial provided but recommend to read the docs & the report first.
 Obviously, you may want to run the [tutorial notebook](./tutorial/boxing_tutorial.ipynb) outside the tutorial folder to be able to load the __boxes__ package.
 
 If you plan to add new algorithms, it is really easy but you will have to consider amending the logfile management (eg. canonization, reading).
+
+
+
+## References
+
+| [1] | ####Fractality and self-similarity in scale-free networks |
