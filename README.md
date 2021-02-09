@@ -5,7 +5,7 @@ The following algorithms are implemented:
 
 | Type          | Algorithm                                          | Abbr  | Year | Ref |
 |---------------|----------------------------------------------------|-------|------|-----|
-| Classic       | Random sequental                                   | RS    | 2007 | [[1](#random-sequential)] |
+| Classic       | Random sequental                                   | RS    | 2007 | [[1]](#random-sequential) |
 | Classic       | Greedy coloring                                    | GC    | 2007 | [2] |
 | Burning       | Compact-Box-Burning                                | CBB   | 2007 | [2] |
 | Burning       | Max-Excluded Mass Burning                          | MEMB  | 2007 | [2] |
