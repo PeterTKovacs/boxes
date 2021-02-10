@@ -1,7 +1,8 @@
 # Box-Covering Algorithms for Fractal Networks
 This repository contains several box-covering algorithms, which are designed to estimate the fractal dimensionn of complex networks. They are implemeneted in the __boxes__ package.
-The following algorithms are implemented:
 
+
+## Implemented box-covering algorithms
 
 | Type          | Algorithm                                          | Abbr  | Year | Ref |
 |---------------|----------------------------------------------------|-------|------|-----|
