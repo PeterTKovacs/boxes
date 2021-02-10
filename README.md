@@ -11,8 +11,8 @@ The following algorithms are implemented:
 | Burning       | Max-Excluded Mass Burning                          | MEMB  | 2007 | [[2]](#how-to-calc)       |
 | Burning       | Ratio of excluded mass to closeness centrality     | REMCC | 2016 | [[3]](#remcc)             |
 | Burning       | MCWR algortihm                                     | MCWR  | 2019 | [[4]](#mcwr)              |
-| Classic       | Merge algorithm                                    | MA    | 2010 | [5] |
-| Metaheuristic | Simulated annealing algorithm                      | SA    | 2010 | [5] |
+| Classic       | Merge algorithm                                    | MA    | 2010 | [[5]](#ma-sa)             |
+| Metaheuristic | Simulated annealing algorithm                      | SA    | 2010 | [[5]](#ma-sa)             |
 | Other         | Overlapping Box Covering Algorithm                 | OBCA  | 2014 | [6] |
 | Metaheuristic | Differential evolution                             | DE    | 2014 | [7] |
 | Other         | Fuzzy box-covering                                 | Fuzzy | 2014 | [8] |
@@ -41,3 +41,5 @@ If you plan to add new algorithms, it is really easy but you will have to consid
 | <a name="how-to-calc"></a>[2] | Song, C., Gallos, L. K., Havlin, S., & Makse, H. A. (2007). How to calculate the fractal dimension of a complex network: the box covering algorithm. *Journal of Statistical Mechanics: Theory and Experiment*, 2007(03), P03006. |
 | <a name="remcc"></a>[3] | Zheng, W., Pan, Q., Sun, C., Deng, Y. F., Zhao, X. K., & Kang, Z. (2016). Fractal analysis of mobile social networks. *Chinese Physics Letters*, 33(3), 038901. |
 | <a name="mcwr"></a>[4] | Liao, H., Wu, X., Wang, B. H., Wu, X., & Zhou, M. (2019). Solving the speed and accuracy of box-covering problem in complex networks. *Physica A: Statistical Mechanics and its Applications*, 523, 954-963. |
+| <a name="ma-sa"></a>[5] | Locci, M., Concas, G., Tonelli, R., & Turnu, I. (2010). Three algorithms for analyzing fractal software networks. *WSEAS Trans. Info. Sci. and App*, 7, 371-380. |
+
