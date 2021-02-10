@@ -6,9 +6,9 @@ The following algorithms are implemented:
 | Type          | Algorithm                                          | Abbr  | Year | Ref |
 |---------------|----------------------------------------------------|-------|------|-----|
 | Classic       | Random sequental                                   | RS    | 2007 | [[1]](#random-sequential) |
-| Classic       | Greedy coloring                                    | GC    | 2007 | [2] |
-| Burning       | Compact-Box-Burning                                | CBB   | 2007 | [2] |
-| Burning       | Max-Excluded Mass Burning                          | MEMB  | 2007 | [2] |
+| Classic       | Greedy coloring                                    | GC    | 2007 | [[2]](#how-to-calc)       |
+| Burning       | Compact-Box-Burning                                | CBB   | 2007 | [[2]](#how-to-calc)       |
+| Burning       | Max-Excluded Mass Burning                          | MEMB  | 2007 | [[2]](#how-to-calc)       |
 | Burning       | Ratio of excluded mass to closeness centrality     | REMCC | 2016 | [3] |
 | Burning       | MCWR algortihm                                     | MCWR  | 2019 | [4] |
 | Classic       | Merge algorithm                                    | MA    | 2010 | [5] |
@@ -35,6 +35,7 @@ If you plan to add new algorithms, it is really easy but you will have to consid
 
 ## References
 
-| Ref | Title |
+| Ref | Paper |
 |-----|-------|
-| <a name="random-sequential"></a>[1] | Fractality and self-similarity in scale-free networks  |
+| <a name="random-sequential"></a>[1] | Kim, J. S., Goh, K. I., Kahng, B., & Kim, D. (2007). Fractality and self-similarity in scale-free networks. *New Journal of Physics*, 9(6), 177.  |
+| <a name="how-to-calc"></a>[2] | Song, C., Gallos, L. K., Havlin, S., & Makse, H. A. (2007). How to calculate the fractal dimension of a complex network: the box covering algorithm. *Journal of Statistical Mechanics: Theory and Experiment*, 2007(03), P03006. |
