@@ -2,7 +2,7 @@
 This repository contains several box-covering algorithms, which are designed to estimate the fractal dimensionn of complex networks. They are implemeneted in the __boxes__ package.
 
 
-## Implemented box-covering algorithms
+## Implemented Algorithms
 
 | Type          | Algorithm                                          | Abbr  | Year | Ref |
 |---------------|----------------------------------------------------|-------|------|-----|
