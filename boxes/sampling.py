@@ -1,6 +1,6 @@
 from .random_sequential import random_sequential
 
-def sampling(network, algorithm, n,strategy,maxbox_sampling=False, **kwargs):
+def sampling(network,bsize, algorithm, n,strategy,maxbox_sampling=False, **kwargs):
     
     # first stage: run the provided algorithm n times and store all boxes
     
@@ -11,8 +11,8 @@ def sampling(network, algorithm, n,strategy,maxbox_sampling=False, **kwargs):
     
     if maxbox_sampling: # not a standalone boxing algorithm - need estimation from RS
         
-        n_estimate=random_sequential(network,int(kwargs['lb']/2),boxing=True)
-        box_batch=algorithm(network,kwargs['lb'],n*n_estimate)
+        n_estimate=random_sequential(network,int(bsize/2),boxing=True) # maxbox sampling uses lb
+        box_batch=algorithm(network,bsize,n*n_estimate)
         
         for b in box_batch:
             boxes[id_]=b
@@ -25,7 +25,7 @@ def sampling(network, algorithm, n,strategy,maxbox_sampling=False, **kwargs):
     else:
         
         for i in range(n):
-            box_batch=algorithm(network,**kwargs)
+            box_batch=algorithm(network,bsize,**kwargs)
 
             for b in box_batch:
                 boxes[id_]=b
