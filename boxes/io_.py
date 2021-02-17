@@ -164,7 +164,7 @@ def read_logfile_bench(path):
                          
     return readout
 
-def canonized_lb(path,alg):
+def canonized_lb(path,alg,lb_alg,rb_alg):
     
     readout=read_logfile(path)
     
@@ -173,7 +173,7 @@ def canonized_lb(path,alg):
         
         return readout
     
-    elif alg in ['mcwr_0.75','mcwr_0.5','mcwr_0.25','memb','random_sequential','remcc','sampling_rs']:
+    elif alg in rb_alg: #['mcwr_0.75','mcwr_0.5','mcwr_0.25','memb','random_sequential','remcc','sampling_rs']:
         
         curated=[]
         
@@ -182,8 +182,8 @@ def canonized_lb(path,alg):
         
         return curated
     
-    elif alg in ['cbb','greedy','obca','merge','sampling_maxbox','simulated_annealing','differential_evolution',
-                'pso']:
+    elif alg in lb_alg:  #['cbb','greedy','obca','merge','sampling_maxbox','simulated_annealing','differential_evolution',
+                #'pso']:
         
         curated=[]
         
@@ -197,7 +197,7 @@ def canonized_lb(path,alg):
         print('Algorithm out of the set of curated ones, try later')
         return 0
     
-def canonized_lb_bench(path,alg):
+def canonized_lb_bench(path,alg,lb_alg,rb_alg):
     
     readout=read_logfile_bench(path)
     
@@ -206,7 +206,7 @@ def canonized_lb_bench(path,alg):
         
         return readout
     
-    elif alg in ['mcwr_0.75','mcwr_0.5','mcwr_0.25','memb','random_sequential','remcc','sampling_rs']:
+    elif alg in rb_alg: #['mcwr_0.75','mcwr_0.5','mcwr_0.25','memb','random_sequential','remcc','sampling_rs']:
         
         curated=[]
         
@@ -215,8 +215,8 @@ def canonized_lb_bench(path,alg):
         
         return curated
     
-    elif alg in ['cbb','greedy','obca','merge','sampling_maxbox','simulated_annealing','differential_evolution',
-                'pso']:
+    elif alg in lb_alg: #['cbb','greedy','obca','merge','sampling_maxbox','simulated_annealing','differential_evolution',
+                #'pso']:
         
         curated=[]
         
