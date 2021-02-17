@@ -67,8 +67,8 @@ def mcwr(network, rb,p=1, boxing=False):
                     
                     p_node=random.choice(list(non_center)) # avoid choosing centers that are to be discarded
                     
-                    while len(network.ball_of_seed(p_node, rb).intersection(uncovered))==0: # p_node must be discarded
-                        p_node=random.choice(list(non_center))
+                    if len(network.ball_of_seed(p_node, rb).intersection(uncovered))==0: # p_node must be discarded
+                        continue # implemented first in a bad way - if all covered goto random choice!
                     
 #   updating the excluded masses, after finding p_node
             
