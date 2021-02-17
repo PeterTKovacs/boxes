@@ -1,6 +1,6 @@
 from .random_sequential import random_sequential
 
-def sampling(network,bsize, algorithm, n,strategy,maxbox_sampling=False, **kwargs):
+def sampling(network,bsize, inner_algorithm, n_repeat,strategy,maxbox_sampling=False,outer_boxing=True, **kwargs):
     
     # first stage: run the provided algorithm n times and store all boxes
     
@@ -12,7 +12,7 @@ def sampling(network,bsize, algorithm, n,strategy,maxbox_sampling=False, **kwarg
     if maxbox_sampling: # not a standalone boxing algorithm - need estimation from RS
         
         n_estimate=random_sequential(network,int(bsize/2),boxing=True) # maxbox sampling uses lb
-        box_batch=algorithm(network,bsize,n*n_estimate)
+        box_batch=inner_algorithm(network,bsize,n_repeat*n_estimate)
         
         for b in box_batch:
             boxes[id_]=b
@@ -24,8 +24,8 @@ def sampling(network,bsize, algorithm, n,strategy,maxbox_sampling=False, **kwarg
             id_+=1
     else:
         
-        for i in range(n):
-            box_batch=algorithm(network,bsize,**kwargs)
+        for i in range(n_repeat):
+            box_batch=inner_algorithm(network,bsize,**kwargs)
 
             for b in box_batch:
                 boxes[id_]=b
@@ -86,8 +86,11 @@ def sampling(network,bsize, algorithm, n,strategy,maxbox_sampling=False, **kwarg
                     break
                 sequence[j+1:]=semimerge(affected_boxes,sequence[j+1:],sizes) #only order the relevant
   
-        
-    return final_boxes
+    
+    if outer_boxing:
+        return len(final_boxes)
+    else:
+        return final_boxes
             
 def cover(box_id,boxes,parent_boxes,uncovered,sizes,cfreq):
     
