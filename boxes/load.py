@@ -1,5 +1,5 @@
 import networkx as nx
-from .network import network
+
 
 def read_from_edgelist(edge_file,header=0):
     
@@ -38,9 +38,9 @@ def read_max_connected_component(path,header_length=0):
         
         max_connected=graph.subgraph((max(nx.connected_components(graph),key=len)))
         
-        return network(max_connected)
+        return max_connected
     
     else:
-        return network(graph)
+        return graph
     
                 

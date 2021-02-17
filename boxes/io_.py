@@ -13,42 +13,47 @@ def run_boxing(names,time_offset,network,box_sizes,algorithm,merge_alg=False,**k
     
     '''
     
-    start=time.time()
+    
     
     nb_results={}
+    runtimes={}
     
     if merge_alg:
         
         nb_res=algorithm(network,box_sizes,**kwargs) # in this case, only the max lb is passed
         
-        for index,item in enumerate(nb_res): # assuming measure_time=False, list of Nb starting from lb=0
+        for index,item in enumerate(nb_res): # assuming measure_time=True, list of Nb starting from lb=0
             
-            nb_results[index]=item
+            nb_results[index]=item[0]
+            runtimes[index]=item[1]+time_offset
             
             gc.collect()
     
     else: 
         for box_size in box_sizes:
         
+            start=time.time()
             nb_results[box_size]=algorithm(network,box_size,**kwargs)
+            end=time.time()
+            
+            runtimes[box_size]=end-start+time_offset
             
             gc.collect()
             
             if nb_results[box_size]==1:
                 break
         
-    end=time.time()
+    
     
     with open(names['path']+names['net']+'_'+names['alg']+'.txt','w') as f:
         
         f.write('network: '+names['net']+'\n')
         f.write('algorithm: '+names['alg']+'\n')
         f.write('keyword arguments:'+str(kwargs)+'\n')
-        f.write('execution time: '+str(end-start+time_offset)+'\n')
-        f.write('box size\tNb\n')
+        f.write('box size\tNb\tt\n')
         
         for size in nb_results.keys():
-            f.write(str(size)+'\t'+str(nb_results[size])+'\n')
+            f.write(str(size)+'\t'+str(nb_results[size])+'\t'+str(runtimes[size])+'\n')
             
 def benchmark(names,time_offset,network,box_sizes,algorithm,n,merge_alg=False,**kwargs):
     
@@ -61,28 +66,37 @@ def benchmark(names,time_offset,network,box_sizes,algorithm,n,merge_alg=False,**
     
     
     
-        start=time.time()
+        
         
         if merge_alg:
             
-            nbs=np.zeros((n,box_sizes+1),int) # merge gives 0 too
+            nbs=np.zeros((n,box_sizes+1),float) # merge gives 0 too
+            runtimes=np.zeros((n,box_sizes+1),float)
             
             for i in range(n):
                 
-                nbs[i,:]=np.array(algorithm(network,box_sizes,**kwargs))
+                output=algorithm(network,box_sizes,**kwargs)
+                
+                nbs[i,:]=np.array([item[0] for item in output])
+                runtimes[i,:]=np.array([item[1]+time_offset for item in output])
                 
                 gc.collect()
 
-        else:
+        else: 
             
-            nbs=np.zeros((n,len(box_sizes)),int)
+            nbs=np.zeros((n,len(box_sizes)),float) # fuzzy
+            runtimes=np.zeros((n,len(box_sizes)),float)
             
             nmax=len(box_sizes)
             
             for index,size in enumerate(box_sizes):
                 for j in range(n):
-                         
+                    
+                    start=time.time()
                     nbs[j,index]=algorithm(network,size,**kwargs)
+                    end=time.time()
+                    
+                    runtimes[j,index]=end-start+time_offset
                     
                     gc.collect()
                     
@@ -90,28 +104,28 @@ def benchmark(names,time_offset,network,box_sizes,algorithm,n,merge_alg=False,**
                     nmax=index
                     break
         
-        end=time.time()
-                         
-        f.write('execution time: '+str(end-start+time_offset)+'\n')                 
-        f.write('box size\tNbs\n')
+        
+                                         
+        f.write('box size\tNbs\tts\n')
 
         for box_ in range(nbs.shape[1]): # iterate over box sizes
               
             if merge_alg:
                 
-                f.write(str(box_)+'\t'+np.array2string(nbs[:,box_],separator=',',max_line_width=n*100)+'\n')
+                f.write(str(box_)+'\t'+np.array2string(nbs[:,box_],separator=',',max_line_width=n*1000)+'\t'
+                                      +np.array2string(runtimes[:,box_],separator=',',max_line_width=n*1000)+'\n')
                          
             else:
                 
                 if nmax<box_:
                           break
             
-                f.write(str(box_sizes[box_])+'\t'+np.array2string(nbs[:,box_],separator=',',max_line_width=n*100)+'\n')
+                f.write(str(box_sizes[box_])+'\t'+np.array2string(nbs[:,box_],separator=',',max_line_width=n*1000)+'\t'
+                                                 +np.array2string(runtimes[:,box_],separator=',',max_line_width=n*1000)+'\n')
     
 def read_logfile(path):
     
     readout=[]
-    exec_time=-1.
     
     with open(path,'r') as f:
         data=False
@@ -119,22 +133,17 @@ def read_logfile(path):
         for line in f:
             tmp=line.split('\t')
             
-            if 'execution time' in line:
-                tmp2=line.split(' ')
-                exec_time=float(tmp2[-1])
-            
             if data:
-                readout.append((int(tmp[0]),float(tmp[1]))) # because of fuzzy
+                readout.append((int(tmp[0]),float(tmp[1]),float(tmp[2]))) # because of fuzzy
             
             if tmp[0]=='box size':
                 data=True
-    return exec_time,readout
+    return readout
 
 
 def read_logfile_bench(path):
     
     readout=[]
-    exec_time=-1.
     
     with open(path,'r') as f:
         data=False
@@ -142,80 +151,79 @@ def read_logfile_bench(path):
         for line in f:
             tmp=line.split('\t')
             
-            if 'execution time' in line:
-                tmp2=line.split(' ')
-                exec_time=float(tmp2[-1])
-            
             if data:
                          
                 lb=int(tmp[0])
-                nbs=np.fromstring(tmp[1][1:-1],sep=',',dtype=float)   # because of fuzzy and trailing [..]       
+                nbs=np.fromstring(tmp[1][1:-1],sep=',',dtype=float)   # because of fuzzy and trailing [..]  
+                runtimes=np.fromstring(tmp[2][1:-1],sep=',',dtype=float)
                          
-                readout.append((lb,nbs))
+                readout.append((lb,nbs,runtimes))
             
             if tmp[0]=='box size':
                 data=True
                          
-    return exec_time,readout
+    return readout
 
-def canonized_lb(path,alg):
+def canonized_lb(path,alg,lb_alg,rb_alg):
     
-    exec_time,readout=read_logfile(path)
+    readout=read_logfile(path)
     
     if alg=='fuzzy':
         # no modification is needed - see original paper
         
-        return exec_time,readout
+        return readout
     
-    elif alg in ['mcwr_0.75','mcwr_0.5','mcwr_0.25','memb','random_sequential','remcc']:
+    elif alg in rb_alg: #['mcwr_0.75','mcwr_0.5','mcwr_0.25','memb','random_sequential','remcc','sampling_rs']:
         
         curated=[]
         
         for item in readout:
-            curated.append((2*item[0]+1,item[1]))
+            curated.append((2*item[0]+1,item[1],item[2]))
         
-        return exec_time,curated
+        return curated
     
-    elif alg in ['cbb','greedy','obca','merge']:
+    elif alg in lb_alg:  #['cbb','greedy','obca','merge','sampling_maxbox','simulated_annealing','differential_evolution',
+                #'pso']:
         
         curated=[]
         
         for item in readout:
-            curated.append((item[0]+1,item[1]))
+            curated.append((item[0]+1,item[1],item[2]))
         
-        return exec_time,curated
+        return curated
     
     else:
         
         print('Algorithm out of the set of curated ones, try later')
         return 0
     
-def canonized_lb_bench(path,alg):
+def canonized_lb_bench(path,alg,lb_alg,rb_alg):
     
-    exec_time,readout=read_logfile_bench(path)
+    readout=read_logfile_bench(path)
     
     if alg=='fuzzy':
         # no modification is needed - see original paper
         
-        return exec_time,readout
+        return readout
     
-    elif alg in ['mcwr_0.75','mcwr_0.5','mcwr_0.25','memb','random_sequential','remcc']:
+    elif alg in rb_alg: #['mcwr_0.75','mcwr_0.5','mcwr_0.25','memb','random_sequential','remcc','sampling_rs']:
         
         curated=[]
         
-        for item in readout:
-            curated.append((2*item[0]+1,item[1]))
+        for item in readout:  # item[1], item[2] is numpy array now
+            curated.append((2*item[0]+1,item[1],item[2]))
         
-        return exec_time,curated
+        return curated
     
-    elif alg in ['cbb','greedy','obca','merge']:
+    elif alg in lb_alg: #['cbb','greedy','obca','merge','sampling_maxbox','simulated_annealing','differential_evolution',
+                #'pso']:
         
         curated=[]
         
-        for item in readout:
-            curated.append((item[0]+1,item[1]))
+        for item in readout: # item[1], item[2] is numpy array now
+            curated.append((item[0]+1,item[1],item[2]))
         
-        return exec_time,curated
+        return curated
     
     else:
         

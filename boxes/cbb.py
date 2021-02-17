@@ -32,19 +32,19 @@ def cbb(network, lb, boxing=False):
 
             while len(uncovered_nodes) > 0:
                 candidate_set = uncovered_nodes.copy() # set of nodes that are compatible with all in the box
-                box = []
+                box = set() # modified from list
                 while len(candidate_set) > 0:
                     
                     #new member of the box - valid
                     p = random.choice(list(candidate_set))
                     candidate_set.discard(p)
-                    box.append(p)
+                    box.add(p)
                     
                    # remove the ones incompatible with the newly chosen: result is again compatible with all in the box
                     candidate_set = candidate_set - far_away_nodes(distances, p, lb) 
                 
                 boxes.append(box)
-                uncovered_nodes = uncovered_nodes - set(box)
+                uncovered_nodes = uncovered_nodes - box
         if boxing:
             return len(boxes)
         else:

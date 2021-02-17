@@ -18,7 +18,7 @@ def greedy_coloring(network, lb, boxing=False, pso_position=False, strategy='ran
         boxes = []
         
         for color in inved_dual_colors.keys():
-            boxes.append(inved_dual_colors[color])
+            boxes.append(set(inved_dual_colors[color]))
 
 # Recovering coloring for individual nodes, if needed          
             
