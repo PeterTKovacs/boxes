@@ -100,7 +100,7 @@ def benchmark(names,time_offset,network,box_sizes,algorithm,n,merge_alg=False,**
                     
                     gc.collect()
                     
-                if np.sum(nbs[:,index])==n: # all ones, terminate!
+                if int(np.sum(nbs[:,index]))==n: # all ones, terminate!
                     nmax=index
                     break
         
