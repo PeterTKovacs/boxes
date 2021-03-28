@@ -5,7 +5,7 @@ import random
 import math
 import networkx as nx
 
-def simulated_annealing(network, lb, k1=20, k2=2, k3=15, temp=0.6, cc=0.995):
+def simulated_annealing(network, lb, k1=20, k2=2, k3=15, temp=0.6, cc=0.995,boxing=False):
     
     # "Three  Algorithms  for  Analyzing  Fractal  Software  Networks"
     # by Mario Locci et al
@@ -102,4 +102,7 @@ def simulated_annealing(network, lb, k1=20, k2=2, k3=15, temp=0.6, cc=0.995):
             
 
 
-    return list(map(list, s))
+    if boxing:
+        return len(s)
+    else:
+        return list(map(list, s))
