@@ -110,7 +110,7 @@ def differential_evolution(network, lb, num_p=15, big_f=0.9, cr=0.85, gn=15, box
         # 5. The Mutation phase
         
         for i in range(num_p): # the instance to mutate
-            r1 = random.randint(0, num_p - 1) # random choice more effectively?
+            r1 = random.randint(0, num_p - 1) # random choice more effectively? r1, r2, r3 = np.random.choice(range(num_p), size=3, replace=False)
             r2 = random.randint(0, num_p - 1)
             r3 = random.randint(0, num_p - 1)
             while i == r1 or i == r2 or i == r3 or r1 == r2 or r1 == r3 or r2 == r3: # itself or not mutually different
