@@ -1,0 +1,3 @@
+network: eco
+algorithm: pso_1000
+keyword arguments:{'gmax': 1000, 'pop': 99, 'c1': 1.494, 'c2': 1.494, 'boxing': True}

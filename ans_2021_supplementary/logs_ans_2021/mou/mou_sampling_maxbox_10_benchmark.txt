@@ -1,0 +1,5 @@
+network: mou
+algorithm: sampling_maxbox_10
+keyword arguments:{'inner_algorithm': <function maximal_box_sampling at 0x7f469c818e18>, 'n_repeat': 10, 'strategy': 'small_first', 'maxbox_sampling': True, 'outer_boxing': True}
+box size	Nbs	ts
+2	[1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.]	[0.19690919,0.17864633,0.1602695 ,0.21434426,0.19615579,0.19862914,0.18129635,0.14243674,0.17833257,0.14139724,0.19622588,0.14156294,0.1608398 ,0.17837787,0.19614577]

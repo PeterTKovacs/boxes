@@ -1,0 +1,5 @@
+network: mou
+algorithm: sampling_rs_10
+keyword arguments:{'inner_algorithm': <function random_sequential at 0x7fdcb2edae18>, 'n_repeat': 10, 'strategy': 'small_first', 'maxbox_sampling': False, 'outer_boxing': True, 'boxing': False}
+box size	Nbs	ts
+1	[4.,3.,3.,4.,3.,3.,4.,4.,2.,3.,3.,4.,3.,3.,3.]	[0.0787313 ,0.07878971,0.07879734,0.07880235,0.07881856,0.0788734 ,0.07880688,0.07876587,0.07875586,0.0788877 ,0.07881832,0.07883286,0.07880139,0.07889295,0.07879806]
