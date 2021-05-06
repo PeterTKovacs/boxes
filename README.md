@@ -7,9 +7,12 @@ Moreover, the supplementary data for the paper *Comparative Analysis of Box-Cove
 ## How to Cite
 ```
 @article{kovacs2021comparative,
-  title={Comparative {A}nalysis of {B}ox-{C}overing {A}lgorithms for {F}ractal {N}etworks},
-  author={Kovács, T. Péter and Nagy, Marcell and Molontay, Roland},
-  year={2021}
+         title={Comparative {A}nalysis of {B}ox-{C}overing {A}lgorithms for {F}ractal {N}etworks},
+         author={Kovács, Tamás Péter and Nagy, Marcell and Molontay, Roland},
+         year={2021},
+         eprint={2105.01939},
+         archivePrefix={arXiv},
+         primaryClass={cs.SI}
 }
 ```
 
