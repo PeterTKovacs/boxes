@@ -3,12 +3,12 @@ The real-world networks that were analyzed in *Comparative Analysis of Box-Cover
 | Abbrv | full name, description | Source |
 |---|---|:---:|
 | phd | CSphd: PhD's in computer science | [network repository](https://networkrepository.com/ca-CSphd.php) |
-| cel | C.~elegans: metabolic reactions between substrates | link |
-| soc | Caltech36: social network from Facebook | link |
-| ful | A.~Fulgidus Whole Network: cellular network | link |
-| pol | Polbooks: Books about US politics, compiled by V. Krebs | link |
-| dol | dolphins: Dolphins social network | link |
-| mou | mouse brain data, edges represent fiber tracts | link |
-| min | minnesota: Minnesota road network | link |
-| eco | E.~Coli Whole Network: cellular network | link |
-| tok | Tokyo metro: Tokyo underground network | link |
+| cel | C.~elegans: metabolic reactions between substrates | [network repository](https://networkrepository.com/bio-celegans.php) |
+| soc | Caltech36: social network from Facebook | [network repository](https://networkrepository.com/socfb-Caltech36.php) |
+| ful | A.~Fulgidus Whole Network: cellular network | [wolfram data repository](https://datarepository.wolframcloud.com/resources/Archaeoglobus-Fulgidus-Whole-Network) |  
+| pol | Polbooks: Books about US politics, compiled by V. Krebs | [network repository](https://networkrepository.com/polbooks.php) | 
+| dol | dolphins: Dolphins social network | [network repository](https://networkrepository.com/soc-dolphins.php) |
+| mou | mouse brain data, edges represent fiber tracts | [network repository](https://networkrepository.com/bn-mouse-brain-1.php) |
+| min | minnesota: Minnesota road network | [network repository](https://networkrepository.com/road-minnesota.php) |
+| eco | E.~Coli Whole Network: cellular network | [wolfram data repository](https://datarepository.wolframcloud.com/resources/Escherichia-Coli-Whole-Network) |
+| tok | Tokyo metro: Tokyo underground network | [github.com/onlyuser](https://github.com/onlyuser/tokyo-metro) |
