@@ -1,7 +1,7 @@
 # Box-Covering Algorithms for Fractal Networks
 This repository contains several box-covering algorithms, which are designed to estimate the fractal dimensionn of complex networks. They are implemeneted in the __boxes__ package. 
 
-Moreover, the supplementary data for the paper [*Comparative Analysis of Box-Covering Algorithms for Fractal Networks*](https://arxiv.org/abs/2105.01939) - P. T. Kovács, M. Nagy, R. Molontay (2021) can be found in [this folder](ans_2021_supplementary).
+Moreover, the supplementary data for the paper [*Comparative Analysis of Box-Covering Algorithms for Fractal Networks*](https://appliednetsci.springeropen.com/articles/10.1007/s41109-021-00410-6) - P. T. Kovács, M. Nagy, R. Molontay (2021) can be found in [this folder](ans_2021_supplementary).
 
 
 ## How to Cite
@@ -10,9 +10,10 @@ Moreover, the supplementary data for the paper [*Comparative Analysis of Box-Cov
          title={Comparative {A}nalysis of {B}ox-{C}overing {A}lgorithms for {F}ractal {N}etworks},
          author={Kovács, Tamás Péter and Nagy, Marcell and Molontay, Roland},
          year={2021},
-         eprint={2105.01939},
-         archivePrefix={arXiv},
-         primaryClass={cs.SI}
+         journal={Applied {N}etwork {S}cience},
+         volume={6},
+         pages={73},
+         publisher={Springer}
 }
 ```
 
